@@ -16,7 +16,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000") //TODO: for testing now and then when frontend is deployed to heroku change the origins
+@CrossOrigin(origins = "http://localhost:3000/", allowCredentials = "true", exposedHeaders = "Authorization") //TODO: for testing now and then when frontend is deployed to heroku change the origins
 @RequestMapping("/api/auth")
 public class AuthController {
 
@@ -28,7 +28,13 @@ public class AuthController {
 
     @Autowired
     private RegistrationService registrationService;
-
+    /**
+     * is used for testing now and needs to be updated
+    **/
+    @RequestMapping(value = "/login", method = RequestMethod.OPTIONS)
+    public ResponseEntity<?> handleOptionsRequest() {
+        return ResponseEntity.ok().build();
+    }
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody AuthenticationRequest authReq) {
         try {
