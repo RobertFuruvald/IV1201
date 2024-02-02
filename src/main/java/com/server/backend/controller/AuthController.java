@@ -16,7 +16,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000/", allowCredentials = "true", exposedHeaders = "Authorization") //TODO: for testing now and then when frontend is deployed to heroku change the origins
 @RequestMapping("/api/auth")
 public class AuthController {
 
