@@ -7,11 +7,20 @@ import org.springframework.http.HttpMethod;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+/**
+ * Configuration class for web-specific Spring settings, including CORS configuration.
+ * This class defines bean methods to set up global CORS settings for the application.
+ */
 @Configuration
 public class WebConfig {
-
+    /**
+     * Configures Cross-Origin Resource Sharing (CORS) settings for the application.
+     * Allows web applications hosted on specified origins to interact with the application.
+     * 
+     * @return WebMvcConfigurer with CORS mappings configured.
+     */
     @Bean
-    public WebMvcConfigurer corsConfig() {
+    WebMvcConfigurer corsConfig() {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {

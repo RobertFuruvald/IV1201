@@ -5,6 +5,13 @@ import java.math.BigDecimal;
 import jakarta.persistence.*;
 import lombok.*;
 
+/**
+ * Entity representing a competence profile .
+ * <p>
+ * The {@link Data} annotation from Lombok is used to automatically generate
+ * getters, setters, and other common methods like {@code toString},
+ * {@code equals}, and {@code hashCode}.
+ */
 @Entity
 @Table(name = "competence_profile")
 @Data
