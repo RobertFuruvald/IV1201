@@ -6,6 +6,8 @@ import com.server.backend.security.CustomUserDetailsPrincipal;
 import com.server.backend.security.JwtUtil;
 import com.server.backend.service.RegistrationService;
 
+import jakarta.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -48,7 +50,7 @@ public class AuthController {
      * @return ResponseEntity containing the JWT token or an error message.
      */
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody AuthenticationRequest authReq) {
+    public ResponseEntity<String> login(@Valid @RequestBody AuthenticationRequest authReq) {
         try {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(authReq.getUsername(), authReq.getPassword()));
@@ -70,14 +72,8 @@ public class AuthController {
      * @return ResponseEntity indicating the result of the registration attempt.
      */
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody RegistrationDTO regDetails) {
-        try {
-            registrationService.registerNewApplicant(regDetails);
-
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Missing fields");
-        }
-
+    public ResponseEntity<String> register(@Valid @RequestBody RegistrationDTO regDetails) {
+        registrationService.registerNewApplicant(regDetails);
         return ResponseEntity.status(HttpStatus.CREATED).body("Account Created Successfully");
     }
 
