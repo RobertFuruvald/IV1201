@@ -13,6 +13,17 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+/**
+ * JWT authorization filter that intercepts requests to validate JWT tokens.
+ * <p>
+ * This filter extends {@link OncePerRequestFilter}, ensuring it is executed
+ * once per request.
+ * It checks for the presence of a JWT in the request, validates it, and sets
+ * the authentication in the security context if the token is valid. This
+ * enables Spring Security to authorize the request
+ * based on the roles and privileges of the user associated with the token.
+ * </p>
+ */
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     @Autowired

@@ -6,6 +6,8 @@ import com.server.backend.security.CustomUserDetailsPrincipal;
 import com.server.backend.security.JwtUtil;
 import com.server.backend.service.RegistrationService;
 
+import jakarta.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +17,10 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * Controller for handling authentication requests, including login and
+ * registration.
+ */
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -27,15 +33,24 @@ public class AuthController {
 
     @Autowired
     private RegistrationService registrationService;
+
     /**
      * is used for testing now and needs to be updated
-    **/
+     **/
     @RequestMapping(value = "/login", method = RequestMethod.OPTIONS)
     public ResponseEntity<?> handleOptionsRequest() {
         return ResponseEntity.ok().build();
     }
+
+    /**
+     * Authenticates a user and generates a JWT token upon successful
+     * authentication.
+     * 
+     * @param authReq The authentication request containing username and password.
+     * @return ResponseEntity containing the JWT token or an error message.
+     */
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody AuthenticationRequest authReq) {
+    public ResponseEntity<String> login(@Valid @RequestBody AuthenticationRequest authReq) {
         try {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(authReq.getUsername(), authReq.getPassword()));
@@ -50,15 +65,15 @@ public class AuthController {
         }
     }
 
+    /**
+     * Registers a new user account with the given registration details.
+     * 
+     * @param regDetails The registration details for the new account.
+     * @return ResponseEntity indicating the result of the registration attempt.
+     */
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody RegistrationDTO regDetails) {
-        try {
-            registrationService.registerNewApplicant(regDetails);
-
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Missing fields");
-        }
-
+    public ResponseEntity<String> register(@Valid @RequestBody RegistrationDTO regDetails) {
+        registrationService.registerNewApplicant(regDetails);
         return ResponseEntity.status(HttpStatus.CREATED).body("Account Created Successfully");
     }
 

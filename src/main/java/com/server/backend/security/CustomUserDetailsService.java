@@ -18,6 +18,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Implementation of {@link UserDetailsService} that retrieves user details
+ * from the application's data source using either username or email for
+ * authentication.
+ * <p>
+ * This service interacts with {@link PersonRepository} and
+ * {@link RoleRepository}
+ * to fetch user information and construct a {@link CustomUserDetailsPrincipal}
+ * object that Spring Security
+ * can use for authentication and authorization.
+ */
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
@@ -27,6 +38,24 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Autowired
     private RoleRepository roleRepository;
 
+    /**
+     * Loads the user's details by their username, which can also be an email in
+     * this context.
+     * <p>
+     * This method first attempts to find the user by their username. If not found,
+     * it tries
+     * to find the user by email. Upon successfully finding the user, it constructs
+     * a
+     * {@link CustomUserDetailsPrincipal} object, including the user's roles as
+     * granted authorities.
+     * If the user is not found by either method, it throws a
+     * {@link UsernameNotFoundException}.
+     *
+     * @param username the username or email of the user to load.
+     * @return {@link CustomUserDetailsPrincipal} object containing the user's information.
+     * @throws UsernameNotFoundException if the user cannot be found by username or
+     *                                   email.
+     */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
