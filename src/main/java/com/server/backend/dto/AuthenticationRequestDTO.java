@@ -14,7 +14,7 @@ import lombok.Getter;
  * generate getters,
  */
 @Getter
-public class AuthenticationRequest {
+public class AuthenticationRequestDTO {
     @NotBlank(message = "Password is required")
     private String password;
 

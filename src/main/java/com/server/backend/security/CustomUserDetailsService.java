@@ -8,11 +8,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.server.backend.dto.RegistrationDTO;
 import com.server.backend.entity.Person;
 import com.server.backend.entity.Role;
 import com.server.backend.repository.PersonRepository;
 import com.server.backend.repository.RoleRepository;
+
+import jakarta.transaction.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +30,7 @@ import java.util.Optional;
  * object that Spring Security
  * can use for authentication and authorization.
  */
+@Transactional
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
@@ -52,7 +54,8 @@ public class CustomUserDetailsService implements UserDetailsService {
      * {@link UsernameNotFoundException}.
      *
      * @param username the username or email of the user to load.
-     * @return {@link CustomUserDetailsPrincipal} object containing the user's information.
+     * @return {@link CustomUserDetailsPrincipal} object containing the user's
+     *         information.
      * @throws UsernameNotFoundException if the user cannot be found by username or
      *                                   email.
      */

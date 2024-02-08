@@ -54,18 +54,15 @@ public class WebSecurityConfig {
 	/*
 	 * Authenticationmanager using plaintext password encoder for testing purposes
 	 */
-	@Bean
+	/*@Bean
 	AuthenticationManager authenticationManager(UserDetailsService userDetailsService) {
 		DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
 		provider.setUserDetailsService(userDetailsService);
 		provider.setPasswordEncoder(NoOpPasswordEncoder.getInstance());
 		return new ProviderManager(provider);
 	}
-
-	/*
-	 * Authenticationmanager using passwordencoder. Will use Bcrypt if nothing else
-	 * is specified
-	 */
+*/
+	
 
 	/**
 	 * Configures the {@link AuthenticationManager} with a custom authentication
@@ -88,7 +85,7 @@ public class WebSecurityConfig {
 	 * @return an {@link AuthenticationManager} instance configured with a DAO
 	 *         authentication provider.
 	 */
-/* 
+ 
 	@Bean
 	AuthenticationManager authenticationManager(UserDetailsService userDetailsService,
 			PasswordEncoder passwordEncoder) {
@@ -97,7 +94,7 @@ public class WebSecurityConfig {
 		provider.setPasswordEncoder(passwordEncoder);
 		return new ProviderManager(provider);
 	}
-*/
+
 	@Bean
 	PasswordEncoder passwordEncoder() {
 		return PasswordEncoderFactories.createDelegatingPasswordEncoder();
