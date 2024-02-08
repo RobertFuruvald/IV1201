@@ -23,16 +23,17 @@ import java.util.Date;
 @Component
 public class JwtUtil {
 
-    // @Value("${jwt.secret}")
-    private String secretKey = "testkey";
-    // @Value("${jwt.expiration}")
-    private long expiration = 60 * 60 * 1000;
+    @Value("${JWT_SECRET_KEY}")
+    private String secretKey;
+
+    @Value("${JWT_EXPIRATION}")
+    private long expiration;
     private final String TOKEN_HEADER = "Authorization";
     private final String TOKEN_PREFIX = "Bearer ";
 
     /**
      * Generates a JWT token for the given user details.
-     * 
+     *
      * @param userDetails The {@link CustomUserDetailsPrincipal} for which to
      *                    generate the token.
      * @return A JWT token string.
@@ -48,7 +49,7 @@ public class JwtUtil {
 
     /**
      * Extracts the JWT token from the request header.
-     * 
+     *
      * @param request The HTTP request {@link HttpServletRequest} from which to
      *                extract the token.
      * @return The extracted JWT token, or null if no token is found.
@@ -62,7 +63,7 @@ public class JwtUtil {
 
     /**
      * Validates the given JWT token against the user details.
-     * 
+     *
      * @param token       The JWT token to validate.
      * @param userDetails The {@link CustomUserDetailsPrincipal} against which to
      *                    validate the token.
@@ -75,7 +76,7 @@ public class JwtUtil {
 
     /**
      * Extracts the username from the given JWT token.
-     * 
+     *
      * @param token The JWT token from which to extract the username.
      * @return The username extracted from the token.
      */
@@ -85,7 +86,7 @@ public class JwtUtil {
 
     /**
      * Checks if the given JWT token is expired.
-     * 
+     *
      * @param token The JWT token to check.
      * @return true if the token is expired, false otherwise.
      */
@@ -95,7 +96,7 @@ public class JwtUtil {
 
     /**
      * Extracts all claims from the given JWT token.
-     * 
+     *
      * @param token The JWT token from which to extract claims.
      * @return A {@link Claims} object containing all claims from the token.
      */

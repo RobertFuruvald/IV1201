@@ -25,7 +25,7 @@ public class WebConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("https://kth-recruitment-frontend-3b6226a80ec7.herokuapp.com/")
+                        .allowedOrigins("https://kth-recruitment-frontend-3b6226a80ec7.herokuapp.com/", "http://localhost:3000")
                         .allowedMethods(HttpMethod.GET.name(),
                                 HttpMethod.POST.name()).allowedHeaders(HttpHeaders.CONTENT_TYPE,
                                 HttpHeaders.AUTHORIZATION);
