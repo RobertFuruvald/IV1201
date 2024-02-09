@@ -2,7 +2,9 @@ package com.server.backend.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 /**
  * DTO for carrying user registration details.
@@ -16,6 +18,8 @@ import lombok.Getter;
  * generate getters,
  */
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class RegistrationDTO {
 
     @NotBlank(message = "Name is required")

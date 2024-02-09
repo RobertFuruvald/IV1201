@@ -11,7 +11,6 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -44,7 +43,7 @@ public class AuthController {
      * @return ResponseEntity containing the JWT token or an error message.
      */
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody @Validated AuthenticationRequestDTO authReq) {
+    public ResponseEntity<?> login(@Valid @RequestBody AuthenticationRequestDTO authReq) {
         LoginResponseDTO loginResponse = authenticationService.authenticate(authReq);
         return ResponseEntity.ok(loginResponse);
     }
@@ -56,7 +55,7 @@ public class AuthController {
      * @return ResponseEntity indicating the result of the registration attempt.
      */
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody @Validated RegistrationDTO regDetails) {
+    public ResponseEntity<String> register(@Valid @RequestBody RegistrationDTO regDetails) {
         registrationService.registerNewApplicant(regDetails);
         return ResponseEntity.status(HttpStatus.CREATED).body("Account Created Successfully");
     }

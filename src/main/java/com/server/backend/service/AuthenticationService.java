@@ -9,12 +9,13 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.stereotype.Service;
+
 import com.server.backend.dto.AuthenticationRequestDTO;
 import com.server.backend.dto.LoginResponseDTO;
 import com.server.backend.security.CustomUserDetailsPrincipal;
 import com.server.backend.security.JwtUtil;
 
-import jakarta.validation.Valid;
 
 /**
  * Service class for handling authentication processes.
@@ -28,6 +29,7 @@ import jakarta.validation.Valid;
  * of the authentication response.
  * </p>
  */
+@Service
 public class AuthenticationService {
 
     @Autowired
