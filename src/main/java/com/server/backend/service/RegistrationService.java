@@ -19,6 +19,7 @@ import jakarta.transaction.Transactional;
  * assigning default roles, and ensuring uniqueness of username and email.
  * </p>
  */
+@Transactional
 @Service
 public class RegistrationService {
 
@@ -47,7 +48,7 @@ public class RegistrationService {
      *                                   {@code applicantRegDetails}
      *                                   already exists in the database.
      */
-    @Transactional
+
     public void registerNewApplicant(RegistrationDTO applicantRegDetails) {
 
         if (personRepository.findByUsername(applicantRegDetails.getUsername()).isPresent()) {
