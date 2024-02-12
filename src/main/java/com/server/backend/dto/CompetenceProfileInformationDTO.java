@@ -10,7 +10,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class CompetencProfileInformationDTO {
+public class CompetenceProfileInformationDTO {
 
     @Valid
     private CompetenceDTO competenceDTO;

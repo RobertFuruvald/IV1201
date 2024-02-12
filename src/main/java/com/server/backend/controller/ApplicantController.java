@@ -33,6 +33,7 @@ public class ApplicantController {
 
   @PostMapping("/apply")
   public ResponseEntity<?> submitApplication(@Valid @RequestBody ApplicationSubmissionDTO application) {
+    System.out.println(application.toString());
     applyService.submitApplication(application);
     return ResponseEntity.status(HttpStatus.CREATED).body("Application created Successfully");
   }

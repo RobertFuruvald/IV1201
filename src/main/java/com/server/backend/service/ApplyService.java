@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.server.backend.dto.ApplicationSubmissionDTO;
 import com.server.backend.dto.AvailabilityPeriodDTO;
-import com.server.backend.dto.CompetencProfileInformationDTO;
+import com.server.backend.dto.CompetenceProfileInformationDTO;
 import com.server.backend.dto.CompetenceDTO;
 import com.server.backend.entity.Availability;
 import com.server.backend.entity.CompetenceProfile;
@@ -59,12 +59,12 @@ public class ApplyService {
      *                    and availability information.
      */
     public void submitApplication(ApplicationSubmissionDTO application) {
-        addPersonalCompetence(application.getCompetencProfileInformationDTO());
-        addAvailabilityPeriod(application.getAvailabilityPeriodDTO());
+        addPersonalCompetence(application.getCompetenceProfileInformationDTOs());
+        addAvailabilityPeriod(application.getAvailabilityPeriodDTOs());
         return;
     }
 
-    private void addPersonalCompetence(List<CompetencProfileInformationDTO> competenceProfileDTOs) {
+    private void addPersonalCompetence(List<CompetenceProfileInformationDTO> competenceProfileDTOs) {
         Integer personId = getAuthenticatedUserDetails().getPersonId();
         List<CompetenceProfile> competenceProfiles = competenceProfileDTOs.stream()
                 .map(dto -> new CompetenceProfile(null, personId, dto.getCompetenceDTO().getCompetenceId(),

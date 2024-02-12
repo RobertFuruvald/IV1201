@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.server.backend.dto.AvailabilityPeriodDTO;
-import com.server.backend.dto.CompetencProfileInformationDTO;
+import com.server.backend.dto.CompetenceProfileInformationDTO;
 import com.server.backend.repository.AvailabilityRepository;
 import com.server.backend.repository.CompetenceProfileRepository;
 import com.server.backend.repository.CompetenceRepository;
@@ -24,9 +24,9 @@ public class HandleApplicationsService {
     @Autowired
     private AvailabilityRepository availabilityRepository;
 
-    public List<CompetencProfileInformationDTO> fetchCompetenceProfileInformationForApplicant(Integer applicantId) {
+    public List<CompetenceProfileInformationDTO> fetchCompetenceProfileInformationForApplicant(Integer applicantId) {
         return competenceProfileRepository.findByPersonId(applicantId).stream()
-                .map(profile -> new CompetencProfileInformationDTO(
+                .map(profile -> new CompetenceProfileInformationDTO(
                         competenceRepository.findCompetenceByIdAsDTO(profile.getCompetenceId()),
                         profile.getYearsOfExperience()))
                 .collect(Collectors.toList());
