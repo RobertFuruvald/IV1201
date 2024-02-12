@@ -14,4 +14,5 @@ import com.server.backend.entity.Competence;
  * </p>
  */
 public interface CompetenceRepository extends JpaRepository<Competence, Integer> {
+    
 }
