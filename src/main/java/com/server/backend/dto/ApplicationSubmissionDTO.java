@@ -1,13 +1,15 @@
 package com.server.backend.dto;
 
+import java.util.List;
+
 import jakarta.validation.Valid;
 import lombok.Getter;
 
 @Getter
 public class ApplicationSubmissionDTO {
     @Valid
-    private CompetencProfileInformationDTO competencProfileInformationDTO;
+    private List<CompetencProfileInformationDTO> competencProfileInformationDTO;
     @Valid
-    private AvailabilityPeriodDTO availabilityPeriodDTO;
+    private List<AvailabilityPeriodDTO> availabilityPeriodDTO;
 
 }

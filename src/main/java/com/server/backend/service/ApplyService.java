@@ -50,10 +50,13 @@ public class ApplyService {
     }
 
     /**
-     * Submits an application with the specified competences and availability periods.
-     * It internally adds personal competence and availability periods for the currently authenticated user.
+     * Submits an application with the specified competences and availability
+     * periods.
+     * It internally adds personal competence and availability periods for the
+     * currently authenticated user.
      * 
-     * @param application the {@link ApplicationSubmissionDTO} containing competence and availability information.
+     * @param application the {@link ApplicationSubmissionDTO} containing competence
+     *                    and availability information.
      */
     public void submitApplication(ApplicationSubmissionDTO application) {
         addPersonalCompetence(application.getCompetencProfileInformationDTO());
@@ -61,20 +64,21 @@ public class ApplyService {
         return;
     }
 
-    private void addPersonalCompetence(CompetencProfileInformationDTO competenceProfileDTO) {
-        CompetenceProfile personalCompetenceEntry = new CompetenceProfile();
-        personalCompetenceEntry.setCompetenceId(competenceProfileDTO.getCompetenceDTO().getCompetenceId());
-        personalCompetenceEntry.setYearsOfExperience(competenceProfileDTO.getYearsOfExperience());
-        personalCompetenceEntry.setPersonId(getAuthenticatedUserDetails().getPersonId());
-        competenceProfileRepository.save(personalCompetenceEntry);
+    private void addPersonalCompetence(List<CompetencProfileInformationDTO> competenceProfileDTOs) {
+        Integer personId = getAuthenticatedUserDetails().getPersonId();
+        List<CompetenceProfile> competenceProfiles = competenceProfileDTOs.stream()
+                .map(dto -> new CompetenceProfile(null, personId, dto.getCompetenceDTO().getCompetenceId(),
+                        dto.getYearsOfExperience()))
+                .collect(Collectors.toList());
+        competenceProfileRepository.saveAll(competenceProfiles);
     }
 
-    private void addAvailabilityPeriod(AvailabilityPeriodDTO availabilityDTO) {
-        Availability newAvailabilityPeriod = new Availability();
-        newAvailabilityPeriod.setFromDate(availabilityDTO.getFromDate());
-        newAvailabilityPeriod.setToDate(availabilityDTO.getToDate());
-        newAvailabilityPeriod.setPersonId(getAuthenticatedUserDetails().getPersonId());
-        availabilityRepository.save(newAvailabilityPeriod);
+    private void addAvailabilityPeriod(List<AvailabilityPeriodDTO> availabilityDTOs) {
+        Integer personId = getAuthenticatedUserDetails().getPersonId();
+        List<Availability> availabilityPeriods = availabilityDTOs.stream()
+                .map(dto -> new Availability(null, personId, dto.getFromDate(), dto.getToDate()))
+                .collect(Collectors.toList());
+        availabilityRepository.saveAll(availabilityPeriods);
     }
 
     private CustomUserDetailsPrincipal getAuthenticatedUserDetails() {
