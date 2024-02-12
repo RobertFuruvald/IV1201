@@ -1,7 +1,11 @@
 package com.server.backend.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+
 import com.server.backend.entity.Availability;
+import java.util.List;
+
 
 /**
  * Availability repository interface for handling persistence operations on
@@ -13,4 +17,7 @@ import com.server.backend.entity.Availability;
  * </p>
  */
 public interface AvailabilityRepository extends JpaRepository<Availability, Integer> {
+
+    @Query("")
+    List<Availability> findByPersonId(Integer personId);
 }
