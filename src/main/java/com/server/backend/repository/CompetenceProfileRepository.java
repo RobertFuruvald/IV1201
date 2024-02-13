@@ -1,10 +1,16 @@
 package com.server.backend.repository;
 
+import java.util.Collection;
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+
 import com.server.backend.entity.CompetenceProfile;
 
 /**
- * Competence Profile repository interface for handling persistence operations on
+ * Competence Profile repository interface for handling persistence operations
+ * on
  * {@link CompetenceProfile}
  * entities.
  * <p>
@@ -13,4 +19,7 @@ import com.server.backend.entity.CompetenceProfile;
  * </p>
  */
 public interface CompetenceProfileRepository extends JpaRepository<CompetenceProfile, Integer> {
+
+    List<CompetenceProfile> findByPersonId(Integer personId);
+
 }

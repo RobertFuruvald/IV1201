@@ -44,6 +44,6 @@ public class CompetenceProfile {
     /**
      * How many years of experience the person has for the given competence
      */
-    @Column(name = "years_of_experience")
+    @Column(name = "years_of_experience", precision = 4, scale = 2)
     private BigDecimal yearsOfExperience;
 }
