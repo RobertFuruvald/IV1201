@@ -56,6 +56,12 @@ public class HandleApplicationsService {
         }
     }
 
+    public ApplicationDTO getApplication(Integer applicationId) {
+        Application application = applicationRepository.findByPersonId(applicationId);
+        PersonNameDTO personNameDTO = personRepository.findPersonNameById(application.getPersonId());
+        return new ApplicationDTO(application.getApplicationId(), application.getStatus(), application.getPersonId(), personNameDTO);
+    }
+
 
     public List<CompetenceProfileInformationDTO> fetchCompetenceProfileInformationForApplicant(Integer applicantId) {
         return competenceProfileRepository.findByPersonId(applicantId).stream()
