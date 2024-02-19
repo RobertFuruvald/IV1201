@@ -27,7 +27,7 @@ public class WebConfig {
                 registry.addMapping("/**")
                         .allowedOrigins("https://kth-recruitment-frontend-3b6226a80ec7.herokuapp.com/", "http://localhost:3000")
                         .allowedMethods(HttpMethod.GET.name(),
-                                HttpMethod.POST.name()).allowedHeaders(HttpHeaders.CONTENT_TYPE,
+                                HttpMethod.POST.name(), HttpMethod.PUT.name()).allowedHeaders(HttpHeaders.CONTENT_TYPE,
                                 HttpHeaders.AUTHORIZATION);
             }
         };
