@@ -30,11 +30,12 @@ public class AuthController {
     /**
      * is used for testing now and needs to be updated
      **/
-    @RequestMapping(value = "/login", method = RequestMethod.OPTIONS)
-    public ResponseEntity<?> handleOptionsRequest() {
-        return ResponseEntity.ok().build();
-    }
-
+    /*
+     * @RequestMapping(value = "/login", method = RequestMethod.OPTIONS)
+     * public ResponseEntity<?> handleOptionsRequest() {
+     * return ResponseEntity.ok().build();
+     * }
+     */
     /**
      * Authenticates a user and generates a JWT token upon successful
      * authentication.
