@@ -1,24 +1,24 @@
 package com.server.backend.service;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Service;
-
 import com.server.backend.dto.ApplicationSubmissionDTO;
 import com.server.backend.dto.AvailabilityPeriodDTO;
-import com.server.backend.dto.CompetenceProfileInformationDTO;
 import com.server.backend.dto.CompetenceDTO;
+import com.server.backend.dto.CompetenceProfileInformationDTO;
+import com.server.backend.entity.Application;
 import com.server.backend.entity.Availability;
 import com.server.backend.entity.CompetenceProfile;
+import com.server.backend.repository.ApplicationRepository;
 import com.server.backend.repository.AvailabilityRepository;
 import com.server.backend.repository.CompetenceProfileRepository;
 import com.server.backend.repository.CompetenceRepository;
 import com.server.backend.security.CustomUserDetailsPrincipal;
-
 import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Service class to handle application submission by applicants.
@@ -39,9 +39,12 @@ public class ApplyService {
     @Autowired
     private AvailabilityRepository availabilityRepository;
 
+    @Autowired
+    private ApplicationRepository applicationRepository;
+
     /**
      * Fetches all competences available for applicants to choose from.
-     * 
+     *
      * @return a list of {@link CompetenceDTO} representing all available
      *         competences.
      */
@@ -49,19 +52,25 @@ public class ApplyService {
         return competenceRepository.findCompetencesAsDTOs();
     }
 
+
     /**
      * Submits an application with the specified competences and availability
      * periods.
      * It internally adds personal competence and availability periods for the
      * currently authenticated user.
-     * 
+     *
      * @param application the {@link ApplicationSubmissionDTO} containing competence
      *                    and availability information.
      */
     public void submitApplication(ApplicationSubmissionDTO application) {
         addPersonalCompetence(application.getCompetenceProfileInformationDTOs());
         addAvailabilityPeriod(application.getAvailabilityPeriodDTOs());
-        return;
+        Integer personId = getAuthenticatedUserDetails().getPersonId();
+        Application apply = new Application();
+        apply.setPersonId(personId);
+        if (applicationRepository.findByPersonId(personId) != null) {
+            applicationRepository.save(apply);
+        }
     }
 
     private void addPersonalCompetence(List<CompetenceProfileInformationDTO> competenceProfileDTOs) {
