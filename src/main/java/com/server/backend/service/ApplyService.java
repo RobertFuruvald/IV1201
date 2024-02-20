@@ -7,6 +7,7 @@ import com.server.backend.dto.CompetenceProfileInformationDTO;
 import com.server.backend.entity.Application;
 import com.server.backend.entity.Availability;
 import com.server.backend.entity.CompetenceProfile;
+import com.server.backend.exception.ApplicationAlreadyExistsError;
 import com.server.backend.repository.ApplicationRepository;
 import com.server.backend.repository.AvailabilityRepository;
 import com.server.backend.repository.CompetenceProfileRepository;
@@ -52,7 +53,6 @@ public class ApplyService {
         return competenceRepository.findCompetencesAsDTOs();
     }
 
-
     /**
      * Submits an application with the specified competences and availability
      * periods.
@@ -66,9 +66,12 @@ public class ApplyService {
         addPersonalCompetence(application.getCompetenceProfileInformationDTOs());
         addAvailabilityPeriod(application.getAvailabilityPeriodDTOs());
         Integer personId = getAuthenticatedUserDetails().getPersonId();
-        Application apply = new Application();
-        apply.setPersonId(personId);
-        if (applicationRepository.findByPersonId(personId) != null) {
+
+        if (applicationRepository.findByPersonId(personId) != null)
+            throw new ApplicationAlreadyExistsError("Application already exists for the user");
+        else {
+            Application apply = new Application();
+            apply.setPersonId(personId);
             applicationRepository.save(apply);
         }
     }

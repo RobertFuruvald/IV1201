@@ -124,4 +124,9 @@ public class CustomExceptionHandler {
         String errorMessage = "Invalid date format. Please use the correct date format (yyyy-MM-dd).";
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
     }
+
+    @ExceptionHandler(ApplicationAlreadyExistsError.class)
+    public ResponseEntity<String> applicationAlreadyExistsError(InvalidFormatException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
 }

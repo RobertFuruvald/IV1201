@@ -61,19 +61,18 @@ public class HandleApplicationsService {
     public ApplicationDTO getApplication(Integer applicationId) {
         Application application = applicationRepository.findByApplicationId(applicationId);
         PersonNameDTO personNameDTO = personRepository.findPersonNameById(application.getPersonId());
-        return new ApplicationDTO(application.getApplicationId(), application.getStatus(), application.getPersonId(), personNameDTO);
+        return new ApplicationDTO(application.getApplicationId(), application.getStatus(), application.getPersonId(),
+                personNameDTO);
     }
 
-    public ApplicationDTO getApplicationForUser(String username) {
+    public ApplicationDTO getApplicationForUser() {
         CustomUserDetailsPrincipal user = getAuthenticatedUserDetails();
-        if (user.getUsername().equals(username)) {
-            Application application = applicationRepository.findByPersonId(user.getPersonId());
-            PersonNameDTO personNameDTO = personRepository.findPersonNameById(user.getPersonId());
-            return new ApplicationDTO(application.getApplicationId(), application.getStatus(), application.getPersonId(), personNameDTO);
-        }
-        return null;
-    }
+        Application application = applicationRepository.findByPersonId(user.getPersonId());
+        PersonNameDTO personNameDTO = personRepository.findPersonNameById(user.getPersonId());
+        return new ApplicationDTO(application.getApplicationId(), application.getStatus(), application.getPersonId(),
+                personNameDTO);
 
+    }
 
     public List<CompetenceProfileInformationDTO> fetchCompetenceProfileInformationForApplicant(Integer applicantId) {
         return competenceProfileRepository.findByPersonId(applicantId).stream()
@@ -83,7 +82,7 @@ public class HandleApplicationsService {
                 .collect(Collectors.toList());
     }
 
-    public List<AvailabilityPeriodDTO> fetchAllAvailabilityPeriodsForInApplicant(Integer applicantId) {
+    public List<AvailabilityPeriodDTO> fetchAllAvailabilityPeriodsForApplicant(Integer applicantId) {
 
         return availabilityRepository.findByPersonId(applicantId).stream()
                 .map(availability -> new AvailabilityPeriodDTO(availability.getFromDate(), availability.getToDate()))
@@ -95,6 +94,5 @@ public class HandleApplicationsService {
         return (CustomUserDetailsPrincipal) SecurityContextHolder.getContext()
                 .getAuthentication().getPrincipal();
     }
-
 
 }
