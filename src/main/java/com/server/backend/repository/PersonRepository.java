@@ -21,6 +21,6 @@ public interface PersonRepository extends JpaRepository<Person, Integer> {
 
     Optional<Person> findByEmail(String email);
 
-    @Query("SELECT NEW com.server.backend.dto.PersonNameDTO(p.name, p.surname) FROM Person p WHERE p.id = :id")
+    @Query("SELECT NEW com.server.backend.dto.PersonNameDTO(p.name, p.surname) FROM Person p WHERE p.personId = :id")
     PersonNameDTO findPersonNameById(@Param("id") Integer id);
 }
