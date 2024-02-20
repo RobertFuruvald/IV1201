@@ -57,9 +57,19 @@ public class HandleApplicationsService {
     }
 
     public ApplicationDTO getApplication(Integer applicationId) {
-        Application application = applicationRepository.findByPersonId(applicationId);
+        Application application = applicationRepository.findByApplicationId(applicationId);
         PersonNameDTO personNameDTO = personRepository.findPersonNameById(application.getPersonId());
         return new ApplicationDTO(application.getApplicationId(), application.getStatus(), application.getPersonId(), personNameDTO);
+    }
+
+    public ApplicationDTO getApplicationForUser(String username) {
+        CustomUserDetailsPrincipal user = getAuthenticatedUserDetails();
+        if (user.getUsername().equals(username)) {
+            Application application = applicationRepository.findByPersonId(user.getPersonId());
+            PersonNameDTO personNameDTO = personRepository.findPersonNameById(user.getPersonId());
+            return new ApplicationDTO(application.getApplicationId(), application.getStatus(), application.getPersonId(), personNameDTO);
+        }
+        return null;
     }
 
 
@@ -79,10 +89,9 @@ public class HandleApplicationsService {
     }
 
     private CustomUserDetailsPrincipal getAuthenticatedUserDetails() {
-        CustomUserDetailsPrincipal userDetails = (CustomUserDetailsPrincipal) SecurityContextHolder.getContext()
-                .getAuthentication().getPrincipal();
 
-        return userDetails;
+        return (CustomUserDetailsPrincipal) SecurityContextHolder.getContext()
+                .getAuthentication().getPrincipal();
     }
 
 

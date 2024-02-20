@@ -16,5 +16,9 @@ import java.util.List;
 public interface ApplicationRepository extends JpaRepository<Application, Integer> {
     Application findByPersonId(Integer id);
 
+    //This method may need to be overridden to prevent error from null response
     List<Application> findAll();
+
+    Application findByApplicationId(Integer applicationId);
+
 }
