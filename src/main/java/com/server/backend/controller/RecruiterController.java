@@ -2,8 +2,6 @@ package com.server.backend.controller;
 
 import com.server.backend.dto.ApplicationDTO;
 import com.server.backend.dto.ApplicationResponseDTO;
-import com.server.backend.dto.AvailabilityPeriodDTO;
-import com.server.backend.dto.CompetenceProfileInformationDTO;
 import com.server.backend.service.HandleApplicationsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,12 +15,12 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/recruiter")
-public class ApplicationsController {
+public class RecruiterController {
     @Autowired
     private HandleApplicationsService handleApplicationsService;
 
     @GetMapping("/applications")
-    public ResponseEntity<?> getApplications() {
+    public ResponseEntity<?> getAllApplications() {
         List<ApplicationDTO> applications = handleApplicationsService.fetchAllApplications();
         if (applications == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No applications found");
@@ -30,15 +28,9 @@ public class ApplicationsController {
         return ResponseEntity.ok(applications);
     }
 
-    @GetMapping("/applications/{id}")
-    public ResponseEntity<?> getApplication(@PathVariable Integer id) {
-        ApplicationDTO application = handleApplicationsService.getApplication(id);
-        List<CompetenceProfileInformationDTO> competenceProfileInformationDTOList = handleApplicationsService
-                .fetchCompetenceProfileInformationForApplicant(application.getPersonId());
-        List<AvailabilityPeriodDTO> availabilityPeriodDTOList = handleApplicationsService
-                .fetchAllAvailabilityPeriodsForApplicant(application.getPersonId());
-        ApplicationResponseDTO response = new ApplicationResponseDTO(application, competenceProfileInformationDTOList,
-                availabilityPeriodDTOList);
+    @GetMapping("/applications/{userId}")
+    public ResponseEntity<?> getUsersApplication(@PathVariable Integer userId) {
+        ApplicationResponseDTO response = handleApplicationsService.getApplicationResponseForUser(userId);
         return ResponseEntity.ok(response);
     }
 }
