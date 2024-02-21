@@ -26,6 +26,21 @@ import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 @ControllerAdvice
 public class CustomExceptionHandler {
 
+    @ExceptionHandler(CustomValidationException.class)
+    public ResponseEntity<String> handlecustomValidationException(CustomValidationException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(ApplicationAlreadyExistsError.class)
+    public ResponseEntity<String> handleApplicationAlreadyExistsError(ApplicationAlreadyExistsError ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<String> handleResourceNotFoundException(ResourceNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
+
     /**
      * Handles BadCredentialsException.
      * 

@@ -12,13 +12,11 @@ import org.springframework.http.HttpStatus;
  * instances of this exception into HTTP responses with
  * HttpStatus.BAD_REQUEST (400 bad request) status code
  */
-@ResponseStatus(HttpStatus.BAD_REQUEST)
 public class CustomValidationException extends RuntimeException {
 
     /**
      * Constructor for {@link CustomValidationException} with a given detail
-     * message. The exception will automatically send http response with 400 bad
-     * request status and the given message.
+     * message.
      * 
      * @param message the detail message (which can be retrieved with
      *                {@link Throwable#getMessage()} method).
