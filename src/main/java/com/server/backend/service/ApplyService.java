@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -68,11 +69,13 @@ public class ApplyService {
         addAvailabilityPeriod(application.getAvailabilityPeriodDTOs());
         Integer personId = principalService.getAuthenticatedUserDetails().getPersonId();
 
-        if (applicationRepository.findByPersonId(personId) != null)
+        Optional applicationOpt = applicationRepository.findByPersonId(personId);
+        if (applicationOpt.isPresent())
             throw new ApplicationAlreadyExistsError("Application already exists for the user");
         else {
             Application apply = new Application();
             apply.setPersonId(personId);
+            apply.setStatus("unhandled");
             applicationRepository.save(apply);
         }
     }
