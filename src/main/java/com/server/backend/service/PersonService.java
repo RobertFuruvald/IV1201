@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import com.server.backend.entity.Person;
 import com.server.backend.dto.PersonUpdateDTO;
 import com.server.backend.repository.PersonRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -13,6 +14,7 @@ import java.util.Optional;
  * Service class for updating person information.
  */
 @Service
+@Transactional
 public class PersonService {
 
     @Autowired
@@ -23,42 +25,43 @@ public class PersonService {
 
       /**
      * update all information that needed in person
-     * 
-     * @param username
-     * @param updateDTO The DTO containing the updated information.
+     *
+       * @param email     The email of the person to update.
+       * @param updateDTO The DTO containing the updated information.
      * @return The updated person object if successful, otherwise null.
      */
-
-      public Person updatePersonInformation(String username, PersonUpdateDTO updateDTO) {
-          Optional<Person> optionalPerson = personRepository.findByUsername(username);
+      public Person updatePersonInformation(String email, PersonUpdateDTO updateDTO) {
+          Optional<Person> optionalPerson = personRepository.findByEmail(email);
 
           if (optionalPerson.isPresent()) {
               Person person = optionalPerson.get();
-              if (updateDTO.getName() != null) {
-                  person.setName(updateDTO.getName());
-              }
-              if (updateDTO.getUsername() != null) {
-                  person.setUsername(updateDTO.getUsername());
-              }
-              if (updateDTO.getSurname() != null) {
-                  person.setSurname(updateDTO.getSurname());
-              }
-              if (updateDTO.getEmail() != null) {
-                  person.setEmail(updateDTO.getEmail());
-              }
-              if (updateDTO.getPnr() != null) {
-                  person.setPnr(updateDTO.getPnr());
-              }
-              if (updateDTO.getPassword() != null) {
-                  // Encode the new password using the PasswordEncoder that we have.
-                  String encodedPassword = passwordEncoder.encode(updateDTO.getPassword());
-                  person.setPassword(encodedPassword);
-              }
-              // Save all information about the updated person in the repository and return it.
+              updatePersonFields(person, updateDTO);
               return personRepository.save(person);
           } else {
               return null;
           }
+      }
+
+    private void updatePersonFields(Person person, PersonUpdateDTO updateDTO) {
+        if (updateDTO.getName() != null) {
+            person.setName(updateDTO.getName());
+        }
+        if (updateDTO.getUsername() != null) {
+            person.setUsername(updateDTO.getUsername());
+        }
+        if (updateDTO.getSurname() != null) {
+            person.setSurname(updateDTO.getSurname());
+        }
+        if (updateDTO.getEmail() != null) {
+            person.setEmail(updateDTO.getEmail());
+        }
+        if (updateDTO.getPnr() != null) {
+            person.setPnr(updateDTO.getPnr());
+        }
+        if (updateDTO.getPassword() != null) {
+            String encodedPassword = passwordEncoder.encode(updateDTO.getPassword());
+            person.setPassword(encodedPassword);
+        }
       }
 
 }
