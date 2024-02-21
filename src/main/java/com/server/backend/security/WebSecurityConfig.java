@@ -43,8 +43,8 @@ public class WebSecurityConfig {
 				.csrf(csrf -> csrf.disable())
 				.authorizeHttpRequests((authorize) -> authorize
 						.requestMatchers("/api/auth/**").permitAll()
-						.requestMatchers("/applicant**").hasRole("applicant")
-						.requestMatchers("/recruiter**").hasRole("recruiter")
+						.requestMatchers("/applicant**").hasAuthority("applicant")
+						.requestMatchers("/recruiter**").hasAuthority("recruiter")
 						.anyRequest().authenticated())
 				.sessionManagement(session -> session
 						.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -55,15 +55,16 @@ public class WebSecurityConfig {
 	/*
 	 * Authenticationmanager using plaintext password encoder for testing purposes
 	 */
-	/*@Bean
-	AuthenticationManager authenticationManager(UserDetailsService userDetailsService) {
-		DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-		provider.setUserDetailsService(userDetailsService);
-		provider.setPasswordEncoder(NoOpPasswordEncoder.getInstance());
-		return new ProviderManager(provider);
-	}
-*/
-	
+	/*
+	 * @Bean
+	 * AuthenticationManager authenticationManager(UserDetailsService
+	 * userDetailsService) {
+	 * DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+	 * provider.setUserDetailsService(userDetailsService);
+	 * provider.setPasswordEncoder(NoOpPasswordEncoder.getInstance());
+	 * return new ProviderManager(provider);
+	 * }
+	 */
 
 	/**
 	 * Configures the {@link AuthenticationManager} with a custom authentication
@@ -86,7 +87,7 @@ public class WebSecurityConfig {
 	 * @return an {@link AuthenticationManager} instance configured with a DAO
 	 *         authentication provider.
 	 */
- 
+
 	@Bean
 	AuthenticationManager authenticationManager(UserDetailsService userDetailsService,
 			PasswordEncoder passwordEncoder) {

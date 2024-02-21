@@ -13,7 +13,7 @@ import com.server.backend.repository.AvailabilityRepository;
 import com.server.backend.repository.CompetenceProfileRepository;
 import com.server.backend.repository.CompetenceRepository;
 import com.server.backend.security.CustomUserDetailsPrincipal;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
