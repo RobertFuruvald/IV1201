@@ -11,6 +11,7 @@ import com.server.backend.dto.CompetenceDTO;
 import com.server.backend.dto.CompetenceProfileInformationDTO;
 import com.server.backend.service.ApplyService;
 import com.server.backend.service.HandleApplicationsService;
+import com.server.backend.service.PrincipalService;
 
 import jakarta.validation.Valid;
 
@@ -33,6 +34,9 @@ public class ApplicantController {
   @Autowired
   private ApplyService applyService;
 
+  @Autowired
+  private PrincipalService principalService;
+
   @GetMapping("/competences")
   public ResponseEntity<?> getCompetenceList() {
     List<CompetenceDTO> competencesList = applyService.fetchAllCompetences();
@@ -48,17 +52,8 @@ public class ApplicantController {
 
   @GetMapping("/application")
   public ResponseEntity<?> getApplicationForUser() {
-    ApplicationDTO application = handleApplicationsService.getApplicationForUser();
-    if (application == null) {
-
-      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid request");
-    }
-    List<CompetenceProfileInformationDTO> competenceProfileInformationDTOList = handleApplicationsService
-        .fetchCompetenceProfileInformationForApplicant(application.getPersonId());
-    List<AvailabilityPeriodDTO> availabilityPeriodDTOList = handleApplicationsService
-        .fetchAllAvailabilityPeriodsForApplicant(application.getPersonId());
-    ApplicationResponseDTO response = new ApplicationResponseDTO(application, competenceProfileInformationDTOList,
-        availabilityPeriodDTOList);
+    Integer userId = principalService.getAuthenticatedUserDetails().getPersonId();
+    ApplicationResponseDTO response = handleApplicationsService.getApplicationResponseForUser(userId);
     return ResponseEntity.ok(response);
   }
 

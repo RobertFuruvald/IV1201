@@ -12,10 +12,8 @@ import com.server.backend.repository.ApplicationRepository;
 import com.server.backend.repository.AvailabilityRepository;
 import com.server.backend.repository.CompetenceProfileRepository;
 import com.server.backend.repository.CompetenceRepository;
-import com.server.backend.security.CustomUserDetailsPrincipal;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -43,6 +41,9 @@ public class ApplyService {
     @Autowired
     private ApplicationRepository applicationRepository;
 
+    @Autowired
+    private PrincipalService principalService;
+
     /**
      * Fetches all competences available for applicants to choose from.
      *
@@ -65,7 +66,7 @@ public class ApplyService {
     public void submitApplication(ApplicationSubmissionDTO application) {
         addPersonalCompetence(application.getCompetenceProfileInformationDTOs());
         addAvailabilityPeriod(application.getAvailabilityPeriodDTOs());
-        Integer personId = getAuthenticatedUserDetails().getPersonId();
+        Integer personId = principalService.getAuthenticatedUserDetails().getPersonId();
 
         if (applicationRepository.findByPersonId(personId) != null)
             throw new ApplicationAlreadyExistsError("Application already exists for the user");
@@ -77,7 +78,7 @@ public class ApplyService {
     }
 
     private void addPersonalCompetence(List<CompetenceProfileInformationDTO> competenceProfileDTOs) {
-        Integer personId = getAuthenticatedUserDetails().getPersonId();
+        Integer personId = principalService.getAuthenticatedUserDetails().getPersonId();
         List<CompetenceProfile> competenceProfiles = competenceProfileDTOs.stream()
                 .map(dto -> new CompetenceProfile(null, personId, dto.getCompetenceDTO().getCompetenceId(),
                         dto.getYearsOfExperience()))
@@ -86,17 +87,11 @@ public class ApplyService {
     }
 
     private void addAvailabilityPeriod(List<AvailabilityPeriodDTO> availabilityDTOs) {
-        Integer personId = getAuthenticatedUserDetails().getPersonId();
+        Integer personId = principalService.getAuthenticatedUserDetails().getPersonId();
         List<Availability> availabilityPeriods = availabilityDTOs.stream()
                 .map(dto -> new Availability(null, personId, dto.getFromDate(), dto.getToDate()))
                 .collect(Collectors.toList());
         availabilityRepository.saveAll(availabilityPeriods);
     }
 
-    private CustomUserDetailsPrincipal getAuthenticatedUserDetails() {
-        CustomUserDetailsPrincipal userDetails = (CustomUserDetailsPrincipal) SecurityContextHolder.getContext()
-                .getAuthentication().getPrincipal();
-
-        return userDetails;
-    }
 }

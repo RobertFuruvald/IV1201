@@ -1,10 +1,13 @@
 package com.server.backend.service;
 
 import com.server.backend.dto.ApplicationDTO;
+import com.server.backend.dto.ApplicationResponseDTO;
 import com.server.backend.dto.AvailabilityPeriodDTO;
 import com.server.backend.dto.CompetenceProfileInformationDTO;
 import com.server.backend.dto.PersonNameDTO;
 import com.server.backend.entity.Application;
+import com.server.backend.entity.Person;
+import com.server.backend.exception.ResourceNotFoundException;
 import com.server.backend.repository.*;
 import com.server.backend.security.CustomUserDetailsPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Transactional
@@ -37,8 +41,11 @@ public class HandleApplicationsService {
     @Autowired
     private PersonRepository personRepository;
 
+    @Autowired
+    private PrincipalService principalService;
+
     public List<ApplicationDTO> fetchAllApplications() {
-        String role = getAuthenticatedUserDetails().getAuthorities().stream()
+        String role = principalService.getAuthenticatedUserDetails().getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .toList().get(0);
         if (Objects.equals(role, "recruiter")) {
@@ -65,16 +72,26 @@ public class HandleApplicationsService {
                 personNameDTO);
     }
 
-    public ApplicationDTO getApplicationForUser() {
-        CustomUserDetailsPrincipal user = getAuthenticatedUserDetails();
-        Application application = applicationRepository.findByPersonId(user.getPersonId());
-        PersonNameDTO personNameDTO = personRepository.findPersonNameById(user.getPersonId());
-        return new ApplicationDTO(application.getApplicationId(), application.getStatus(), application.getPersonId(),
+    public ApplicationResponseDTO getApplicationResponseForUser(Integer userId) {
+        Optional<Application> applicationOpt = applicationRepository.findByPersonId(userId);
+        Application application = applicationOpt.orElseThrow(
+                () -> new ResourceNotFoundException("No application for user with id: " + userId + " found"));
+
+        PersonNameDTO personNameDTO = personRepository.findPersonNameById(userId);
+        ApplicationDTO applicationDTO = new ApplicationDTO(application.getApplicationId(), application.getStatus(),
+                application.getPersonId(),
                 personNameDTO);
 
+        List<CompetenceProfileInformationDTO> competenceProfileInformationDTOList = fetchCompetenceProfileInformationForApplicant(
+                userId);
+
+        List<AvailabilityPeriodDTO> availabilityPeriodDTOList = fetchAllAvailabilityPeriodsForApplicant(userId);
+
+        return new ApplicationResponseDTO(applicationDTO, competenceProfileInformationDTOList,
+                availabilityPeriodDTOList);
     }
 
-    public List<CompetenceProfileInformationDTO> fetchCompetenceProfileInformationForApplicant(Integer applicantId) {
+    private List<CompetenceProfileInformationDTO> fetchCompetenceProfileInformationForApplicant(Integer applicantId) {
         return competenceProfileRepository.findByPersonId(applicantId).stream()
                 .map(profile -> new CompetenceProfileInformationDTO(
                         competenceRepository.findCompetenceByIdAsDTO(profile.getCompetenceId()),
@@ -82,17 +99,11 @@ public class HandleApplicationsService {
                 .collect(Collectors.toList());
     }
 
-    public List<AvailabilityPeriodDTO> fetchAllAvailabilityPeriodsForApplicant(Integer applicantId) {
+    private List<AvailabilityPeriodDTO> fetchAllAvailabilityPeriodsForApplicant(Integer applicantId) {
 
         return availabilityRepository.findByPersonId(applicantId).stream()
                 .map(availability -> new AvailabilityPeriodDTO(availability.getFromDate(), availability.getToDate()))
                 .collect(Collectors.toList());
-    }
-
-    private CustomUserDetailsPrincipal getAuthenticatedUserDetails() {
-
-        return (CustomUserDetailsPrincipal) SecurityContextHolder.getContext()
-                .getAuthentication().getPrincipal();
     }
 
 }
