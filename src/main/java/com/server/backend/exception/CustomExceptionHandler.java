@@ -11,6 +11,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.context.request.WebRequest;
 
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 
@@ -24,28 +25,6 @@ import com.fasterxml.jackson.databind.exc.InvalidFormatException;
  */
 @ControllerAdvice
 public class CustomExceptionHandler {
-
-    /**
-     * Handles exceptions of type {@link CustomValidationException}.
-     * <p>
-     * This method is invoked automatically when a {@link CustomValidationException}
-     * is thrown from any part of the application. It constructs a
-     * {@link ResponseEntity}
-     * with a status of {@link HttpStatus.BAD_REQUEST} and includes the exception
-     * message
-     * in the response body.
-     * </p>
-     * 
-     * @param ex The {@link CustomValidationException} instance caught by this
-     *           handler.
-     * @return A {@link ResponseEntity} object containing the exception message and
-     *         a
-     *         HTTP status code of 400 (Bad Request).
-     */
-    @ExceptionHandler(CustomValidationException.class)
-    public ResponseEntity<String> handleValidationExceptions(CustomValidationException ex) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
-    }
 
     /**
      * Handles BadCredentialsException.
@@ -123,5 +102,29 @@ public class CustomExceptionHandler {
     public ResponseEntity<String> handleInvalidFormatException(InvalidFormatException ex) {
         String errorMessage = "Invalid date format. Please use the correct date format (yyyy-MM-dd).";
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
+    }
+
+    /**
+     * Generic exception handler that catches all exceptions not specifically
+     * handled by other exception handlers.
+     * 
+     * This method provides a catch-all mechanism for exceptions that do not match
+     * any of the specific handlers
+     * defined in this class. It ensures that the application can gracefully respond
+     * to any unexpected situation
+     * with a standardized HTTP response.
+     * 
+     * @param ex      The exception instance caught by this handler.
+     * @param request The WebRequest instance providing context about the request
+     *                that resulted in the exception.
+     * @return A ResponseEntity object containing a general error message and an
+     *         HTTP status code of 500 (Internal Server Error).
+     */
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<Object> handleAllExceptions(Exception ex, WebRequest request) {
+        Map<String, Object> body = new HashMap<>();
+        body.put("timestamp", System.currentTimeMillis());
+        body.put("message", "An unexpected error occurred. Please try again later.");
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(body);
     }
 }

@@ -3,6 +3,8 @@ package com.server.backend.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.server.backend.entity.Person;
 import com.server.backend.dto.PersonUpdateDTO;
 import com.server.backend.repository.PersonRepository;
@@ -13,6 +15,7 @@ import java.util.Optional;
 /**
  * Service class for updating person information.
  */
+@Transactional
 @Service
 @Transactional
 public class PersonService {

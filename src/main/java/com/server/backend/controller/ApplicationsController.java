@@ -16,12 +16,12 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/application")
+@RequestMapping("/recruiter")
 public class ApplicationsController {
     @Autowired
     private HandleApplicationsService handleApplicationsService;
 
-    @GetMapping("/recruiter")
+    @GetMapping("/applications")
     public ResponseEntity<?> getApplications() {
         List<ApplicationDTO> applications = handleApplicationsService.fetchAllApplications();
         if (applications == null) {
@@ -30,26 +30,15 @@ public class ApplicationsController {
         return ResponseEntity.ok(applications);
     }
 
-
-    @GetMapping("/{id}")
+    @GetMapping("/applications/{id}")
     public ResponseEntity<?> getApplication(@PathVariable Integer id) {
         ApplicationDTO application = handleApplicationsService.getApplication(id);
-        List<CompetenceProfileInformationDTO> competenceProfileInformationDTOList = handleApplicationsService.fetchCompetenceProfileInformationForApplicant(application.getPersonId());
-        List<AvailabilityPeriodDTO> availabilityPeriodDTOList = handleApplicationsService.fetchAllAvailabilityPeriodsForInApplicant(application.getPersonId());
-        ApplicationResponseDTO response = new ApplicationResponseDTO(application, competenceProfileInformationDTOList, availabilityPeriodDTOList);
-        return ResponseEntity.ok(response);
-    }
-
-    @GetMapping("/{username}")
-    public ResponseEntity<?> getApplicationForUser(@PathVariable String username) {
-        ApplicationDTO application = handleApplicationsService.getApplicationForUser(username);
-        if (application == null) {
-
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid request");
-        }
-        List<CompetenceProfileInformationDTO> competenceProfileInformationDTOList = handleApplicationsService.fetchCompetenceProfileInformationForApplicant(application.getPersonId());
-        List<AvailabilityPeriodDTO> availabilityPeriodDTOList = handleApplicationsService.fetchAllAvailabilityPeriodsForInApplicant(application.getPersonId());
-        ApplicationResponseDTO response = new ApplicationResponseDTO(application, competenceProfileInformationDTOList, availabilityPeriodDTOList);
+        List<CompetenceProfileInformationDTO> competenceProfileInformationDTOList = handleApplicationsService
+                .fetchCompetenceProfileInformationForApplicant(application.getPersonId());
+        List<AvailabilityPeriodDTO> availabilityPeriodDTOList = handleApplicationsService
+                .fetchAllAvailabilityPeriodsForApplicant(application.getPersonId());
+        ApplicationResponseDTO response = new ApplicationResponseDTO(application, competenceProfileInformationDTOList,
+                availabilityPeriodDTOList);
         return ResponseEntity.ok(response);
     }
 }

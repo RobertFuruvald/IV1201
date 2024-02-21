@@ -10,7 +10,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -45,6 +44,8 @@ public class WebSecurityConfig {
 				.authorizeHttpRequests((authorize) -> authorize
 						.requestMatchers("/applicant/apply").hasAuthority("applicant")
 						.requestMatchers("/api/auth/**").permitAll()
+						.requestMatchers("/applicant**").hasAuthority("applicant")
+						.requestMatchers("/recruiter**").hasAuthority("recruiter")
 						.anyRequest().authenticated())
 				.sessionManagement(session -> session
 						.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -55,15 +56,16 @@ public class WebSecurityConfig {
 	/*
 	 * Authenticationmanager using plaintext password encoder for testing purposes
 	 */
-	/*@Bean
-	AuthenticationManager authenticationManager(UserDetailsService userDetailsService) {
-		DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-		provider.setUserDetailsService(userDetailsService);
-		provider.setPasswordEncoder(NoOpPasswordEncoder.getInstance());
-		return new ProviderManager(provider);
-	}
-*/
-	
+	/*
+	 * @Bean
+	 * AuthenticationManager authenticationManager(UserDetailsService
+	 * userDetailsService) {
+	 * DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+	 * provider.setUserDetailsService(userDetailsService);
+	 * provider.setPasswordEncoder(NoOpPasswordEncoder.getInstance());
+	 * return new ProviderManager(provider);
+	 * }
+	 */
 
 	/**
 	 * Configures the {@link AuthenticationManager} with a custom authentication
@@ -86,7 +88,7 @@ public class WebSecurityConfig {
 	 * @return an {@link AuthenticationManager} instance configured with a DAO
 	 *         authentication provider.
 	 */
- 
+
 	@Bean
 	AuthenticationManager authenticationManager(UserDetailsService userDetailsService,
 			PasswordEncoder passwordEncoder) {
