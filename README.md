@@ -15,8 +15,8 @@ This project is the backend component of a recruitment application, developed us
 3. **Change application.properties file located in the resource folder:**
     ```bash
     spring.datasource.url=jdbc:postgresql://http://localhost:YOUR_DB_PORT/YOUR_DB_NAME
-    spring.datasource.username=${YOUR_USERNAME}
-    spring.datasource.password=${YOUR_PASSWORD}
+    spring.datasource.username=YOUR_USERNAME
+    spring.datasource.password=YOUR_PASSWORD
     ```
 4. **Change JwtUtil.java file located in the security folder:**
     ```bash
