@@ -33,4 +33,4 @@ Before starting the backend server, ensure that the database are running.
 
 To start the development server for example using IntelliJ press Ctrl+F5.
 
-Frontend for this server is located [frontend](https://github.com/RobertFuruvald/IV1201_frontend)
+[Frontend](https://github.com/RobertFuruvald/IV1201_frontend) for this server. 
