@@ -10,7 +10,7 @@ This project is the backend component of a recruitment application, developed us
     ```
 
 2. **Create a  local database using postgres:**
-   run the script found in root folder to create the database with the specified tables.
+   run the [script](https://github.com/RobertFuruvald/IV1201/blob/main/database.sql) found in root folder to create the database with the specified tables.
 
 3. **Change application.properties file located in the resource folder:**
     ```bash
