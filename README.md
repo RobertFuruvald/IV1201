@@ -1,7 +1,7 @@
 # IV1201 backend
 Backend server deployed on heroku.
 This project is the backend component of a recruitment application, developed using JAVA. For developing and testing you also need to have a database running locally.
-[Wiki][https://github.com/RobertFuruvald/IV1201_frontend/wiki] for the whole project including the frontend application.
+[Wiki](https://github.com/RobertFuruvald/IV1201_frontend/wiki) for the whole project including the frontend application.
 ## Installation
 
 1. **Clone the repository inside a new folder:**
@@ -33,4 +33,4 @@ Before starting the backend server, ensure that the database are running.
 
 To start the development server for example using IntelliJ press Ctrl+F5.
 
-Frontend for this server is located [frontend][https://github.com/RobertFuruvald/IV1201_frontend]
+Frontend for this server is located [frontend](https://github.com/RobertFuruvald/IV1201_frontend)
